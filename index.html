@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Button Smasher</title>
+<style>
+  body {
+    background: #000;
+    color: white;
+    font-family: Arial Black, Arial, sans-serif;
+    text-align: center;
+    padding-top: 30px;
+  }
+  h1 { color: red; font-size: 40px; }
+  button {
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 20px 40px;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 10px;
+    box-shadow: 0 0 20px red;
+  }
+  button:disabled {
+    background: darkred;
+    cursor: not-allowed;
+  }
+  .stat { font-size: 22px; margin: 8px; }
+  #shop {
+    margin-top: 25px;
+    border-top: 2px solid red;
+    padding-top: 15px;
+  }
+</style>
+</head>
+<body>
+
+<h1>🔥 BUTTON SMASHER 🔥</h1>
+<p>Reach <b>100,000 points</b> to unlock REBIRTH 🔁</p>
+
+<button id="smashBtn">SMASH!</button>
+
+<div class="stat">💥 Points: <span id="points">0</span></div>
+<div class="stat">⚡ Multiplier: <span id="multi">1x</span></div>
+<div class="stat">🔁 Rebirths: <span id="rebirths">0</span></div>
+
+<div id="shop">
+  <h2>🛒 SHOP</h2>
+  <p>Buy 2× Points (Cost: 50 points)</p>
+  <button id="buy2x">BUY 2×</button>
+
+  <hr style="border:1px solid red; margin:15px">
+
+  <p>🔁 Rebirth (100,000 points)</p>
+  <button id="rebirthBtn" disabled>REBIRTH</button>
+</div>
+
+<script>
+  let points = 0;
+  let baseMultiplier = 1;
+  let rebirthCount = 0;
+
+  const smashBtn = document.getElementById("smashBtn");
+  const buy2xBtn = document.getElementById("buy2x");
+  const rebirthBtn = document.getElementById("rebirthBtn");
+
+  const pointsEl = document.getElementById("points");
+  const multiEl = document.getElementById("multi");
+  const rebirthsEl = document.getElementById("rebirths");
+
+  function totalMultiplier() {
+    return baseMultiplier * (rebirthCount + 1);
+  }
+
+  function updateUI() {
+    pointsEl.textContent = points;
+    multiEl.textContent = totalMultiplier() + "x";
+    rebirthsEl.textContent = rebirthCount;
+    rebirthBtn.disabled = points < 100000;
+  }
+
+  smashBtn.onclick = () => {
+    points += totalMultiplier();
+    updateUI();
+  };
+
+  buy2xBtn.onclick = () => {
+    if (points >= 50) {
+      points -= 50;
+      baseMultiplier *= 2;
+      updateUI();
+    } else {
+      alert("Not enough points!");
+    }
+  };
+
+  rebirthBtn.onclick = () => {
+    if (points >= 100000) {
+      rebirthCount++;
+      points = 0;
+      baseMultiplier = 1;
+      alert("🔁 REBIRTH COMPLETE! Permanent boost gained!");
+      updateUI();
+    }
+  };
+
+  updateUI();
+</script>
+
+</body>
+</html>
